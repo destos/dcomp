@@ -1,0 +1,48 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+
+source $script_base/dtools
+
+fix=
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -f|--fix)
+            fix=1
+            ;;
+        -h|--help|?)
+            echo "Run system and linting checks against repository."
+            echo
+            cecho "Usage: $(basename $0) <options>" default bold
+            echo
+            echo "Options:"
+            echo "  -f  --fix           Have black fix found issues"
+            echo "  -h  --help          This help message"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+args=$@
+
+
+echo
+cecho "Running Django System Checks..." blue bold
+docker-compose exec ${DAPP_CONTAINER} ./manage.py check --settings=${DAPP_NAME}.settings.test
+
+echo
+cecho "Running Linting..." blue bold
+if [[ "$fix" ]]; then
+    docker-compose exec ${DAPP_CONTAINER} black .
+else
+    docker-compose exec ${DAPP_CONTAINER} black --check .
+fi
+docker-compose exec ${DAPP_CONTAINER} flake8

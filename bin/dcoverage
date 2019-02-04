@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e
+script_base=$(dirname "$0")
+
+source $script_base/dtools
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -h|--help)
+            echo "Run unit tests."
+            echo
+            cecho "Usage: $(basename $0) <options> [<TEST TYPE>]" default bold
+            echo
+            echo "Options:"
+            echo "  -h  --help          This help message"
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$key")
+            ;;
+    esac
+    shift
+done
+set -- "${POSITIONAL[@]}"
+
+docker-compose exec -e DJANGO_SETTINGS_MODULE=${DAPP_TEST_SETTINGS} ${DAPP_NAME} py.test --cov=. --cov-report=html --cov-report=term $@
