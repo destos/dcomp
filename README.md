@@ -10,7 +10,7 @@ at some point in the near future. The [Docker docs](https://docs.docker.com/refe
 
 ## Installation
 Add environment variables to your project directory that describe your compose and django setup.
-And example can be found in `[.env_example](.env_example)`.
+And example can be found in [env_example](.env_example).
 ### Using [basher](https://github.com/basherpm/basher)
 
 ``` bash
