@@ -89,7 +89,7 @@ case $cmd in
         if [ "$name" ]; then
             opts+="--name $name "
         fi
-        docker-compose exec -u $UID web ./manage.py makemigrations $opts $@
+        docker-compose exec -u $UID ${DAPP_CONTAINER} ./manage.py makemigrations $opts $@
         ;;
     show)
         docker-compose exec ${DAPP_CONTAINER} ./manage.py showmigrations $@

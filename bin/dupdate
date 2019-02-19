@@ -53,6 +53,6 @@ docker-compose build
 
 echo
 cecho "Running database migrations..." default bold
-$script_base/dstart -d web db
+$script_base/dstart -d ${DAPP_CONTAINER} ${DDB_CONTAINER}
 $script_base/dmigrate
 $script_base/dstop

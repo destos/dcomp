@@ -4,7 +4,7 @@ script_base=$(dirname "$0")
 
 source $script_base/dtools
 
-target=web
+target=$DAPP_CONTAINER
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]; do
@@ -27,7 +27,7 @@ while [[ $# -gt 0 ]]; do
             echo
             echo "Options:"
             echo "  -h  --help          This help message"
-            echo "  -t  --target        Choose which service to connect to for `bash` or `sudo` consoles (default: web)"
+            echo "  -t  --target        Choose which service to connect to for `bash` or `sudo` consoles (default: ${DAPP_CONTAINER})"
             exit 0
             ;;
         *)
@@ -52,7 +52,7 @@ case $shell in
         cmd="-u root $target bash"
         ;;
     py|python)
-        cmd="web ./manage.py shell_plus"
+        cmd="${DAPP_CONTAINER} ./manage.py shell_plus"
         ;;
     sql|psql)
         cmd="-u root ${DDB_CONTAINER} psql -U postgres"
